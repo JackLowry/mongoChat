@@ -15,12 +15,12 @@
       <div class="row">
         <div class="col-md-6 offset-md-3 col-sm-12">
           <div style=padding-top:50px;padding-bottom:15px> <h2>Login </h2> </div>
-          <div id="forms" onkeydown='enterLogin(event)'style=padding-bottom:25px>
+          <div id="forms" onkeydown='enterLogin(event)'>
             <input id="username" type="text" placeholder="Username" class="form-control">
             <br>
             <input id="password" type="password" placeholder="Password" class="form-control">
             <br>
-            <div id="error_message"></div>
+            <div id="error_message"style="padding-top:5px"></div>
           </div>
           <button onclick='login()' type="button" class="btn btn-success btn-block" >Login!</button>
           <div style=padding-top:10px>
@@ -53,7 +53,7 @@
             for(var i = 0; i < errStrings.length-1; i++) {
               var newDiv = document.createElement("div");
               newDiv.textContent = errStrings[i];
-              newDiv.setAttribute("style", "color:#f23118", "class","alert alert-danger","role","alert")
+              newDiv.setAttribute("class","alert alert-danger","role","alert")
               errorDiv.appendChild(newDiv);
             }
           }
