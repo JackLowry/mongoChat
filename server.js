@@ -70,4 +70,17 @@ mongo.connect('mongodb://127.0.0.1/mongochat', function(err, db){
             })
           });
         });
+
+        socket.on('login', function(data) {
+          let username = data.username;
+          let password = data.password;
+
+          if(users.find({username,password}).limit(1).size() > 0) {
+            socket.emit('authorized');
+          }
+          else {
+            socket.emit('unauthorized');
+          }
+          
+        })
 });
