@@ -36,6 +36,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
 
     <script>
+      var value = "; " + document.cookie;
+      var parts = value.split("; " + name + "=");
+      if (parts.length == 2) window.location.href = "chat.html";;
+    </script>
+
+    <script>
         function signUp() {
           var socket = io.connect('http://127.0.0.1:4000');
           var username = document.getElementById("username").value;
