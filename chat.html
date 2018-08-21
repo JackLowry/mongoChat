@@ -20,11 +20,8 @@
                 </h1>
                 <div id="status"></div>
                 <div id="chat">
-                    <input type="text" id="username" class="form-control" placeholder="Enter name...">
-                    <br>
                     <div class="card" style="overflow-y:auto; overflow-x:hidden">
                         <div id="messages" class="card-block">
-
                         </div>
                     </div>
                     <br>
@@ -37,7 +34,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
 
     <script>
+
         (function(){
+            cookie = getCookie("username");
+            console.log(cookie);
+            if(cookie === undefined || cookie === null) {
+              window.location.href = "index.html";
+            }
+
             var element = function(id){
                 return document.getElementById(id);
             }
@@ -46,7 +50,6 @@
             var status = element('status');
             var messages = element('messages');
             var textarea = element('textarea');
-            var username = element('username');
             var clearBtn = element('clear');
 
             // Set default status
@@ -101,7 +104,7 @@
                     if(event.which === 13 && event.shiftKey == false){
                         // Emit to server input
                         socket.emit('input', {
-                            name:username.value,
+                            name:cookie,
                             message:textarea.value
                         });
 
@@ -121,6 +124,12 @@
             }
 
         })();
+
+        function getCookie(name) {
+          var value = "; " + document.cookie;
+          var parts = value.split("; " + name + "=");
+          if (parts.length == 2) return parts.pop().split(";").shift();
+        }
     </script>
 </body>
 </html>

@@ -34,6 +34,7 @@
 
     <script>
         function signUp() {
+          var socket = io.connect('http://127.0.0.1:4000');
           var username = document.getElementById("username").value;
           var password = document.getElementById("password").value;
           var repeatPassword = document.getElementById("repeat_password").value;
@@ -59,10 +60,12 @@
             }
           }
           else {
-            socket.emit('signUp', {
-                username:username,
-                password:password
-            });
+            socket.emit('signUp', {name:username,pw:password}, function() {
+              });
+            socket.on('registered', function() {
+                document.cookie = "username=" + username + "; path=/";
+                window.location.href = "chat.html";
+              });
           }
         }
 
