@@ -14,20 +14,19 @@
     <div class="container">
       <div class="row">
         <div class="col-md-6 offset-md-3 col-sm-12">
-          <div style=padding-top:50px;padding-bottom:15px> <h2>Sign Up </h2> </div>
-          <div id="forms" onkeydown='enterSignUp(event)'style=padding-bottom:25px>
+          <div style=padding-top:50px;padding-bottom:15px> <h2>Login </h2> </div>
+          <div id="forms" onkeydown='enterLogin(event)'style=padding-bottom:25px>
             <input id="username" type="text" placeholder="Username" class="form-control">
             <br>
             <input id="password" type="password" placeholder="Password" class="form-control">
             <br>
-            <input id="repeat_password" type="password" placeholder="Repeat Password" class="form-control">
             <div id="error_message"></div>
           </div>
-
-          <button onclick='signUp()' type="button" class="btn btn-success btn-block" >Sign Up!</button>
+          <button onclick='login()' type="button" class="btn btn-success btn-block" >Login!</button>
           <div style=padding-top:10px>
-            <center><h6>Already have an account? </h6><h6><a href="login.html">Login here</h6></center>
+            <center><h6>Don't have an account? </h6><h6><a href="index.html">Sign up here</h6></center>
           </div>
+
         </div>
       </div>
 
@@ -36,16 +35,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
 
     <script>
-        function signUp() {
+        function login() {
           var username = document.getElementById("username").value;
           var password = document.getElementById("password").value;
-          var repeatPassword = document.getElementById("repeat_password").value;
-          //TODO delete later lol
           var errorString = "";
           if(username == "") {errorString += "Please enter a usernamex";}
           if(password == "") {errorString += "Please enter a passwordx";}
-          if(repeatPassword == "") {errorString += "Please repeat your passwordx";}
-          if(password !== repeatPassword) {errorString += "Your passwords do not matchx";}
+
 
           var errorDiv = document.getElementById("error_message");
           while(errorDiv.firstChild) {
@@ -62,16 +58,16 @@
             }
           }
           else {
-            socket.emit('signUp', {
+            socket.emit('login', {
                 username:username,
-                password:password
+                password:password //TODO check credentials and return if good jack!
             });
           }
         }
 
-        function enterSignUp(event) {
+        function enterLogin(event) {
           if(event.which == 13 || event.keyCode == 13) {
-            signUp();
+            login();
           }
         }
     </script>
