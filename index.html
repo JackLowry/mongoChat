@@ -14,17 +14,20 @@
     <div class="container">
       <div class="row">
         <div class="col-md-6 offset-md-3 col-sm-12">
-          <div style='padding-top:10px'> <h2>Sign Up </h2> </div>
-          <div id="forms" onkeydown='enterSignUp(event)'>
+          <div style=padding-top:50px;padding-bottom:15px> <h2>Sign Up </h2> </div>
+          <div id="forms" onkeydown='enterSignUp(event)'style=padding-bottom:25px>
             <input id="username" type="text" placeholder="Username" class="form-control">
             <br>
-            <input id="password" type="password" placeholder="Password">
+            <input id="password" type="password" placeholder="Password" class="form-control">
             <br>
-            <input id="repeat_password" type="password" placeholder="Repeat Password">
+            <input id="repeat_password" type="password" placeholder="Repeat Password" class="form-control">
             <div id="error_message"></div>
           </div>
 
-          <button onclick='signUp()' type="button">Sign Up!</button>
+          <button onclick='signUp()' type="button" class="btn btn-success btn-block" >Sign Up!</button>
+          <div style=padding-top:10px>
+            <center><h6>Already have an account? </h6><h6><a href="login.html">Log in here</h6></center>
+          </div>
         </div>
       </div>
 
@@ -54,7 +57,7 @@
             for(var i = 0; i < errStrings.length-1; i++) {
               var newDiv = document.createElement("div");
               newDiv.textContent = errStrings[i];
-              newDiv.setAttribute("style", "color:#f23118")
+              newDiv.setAttribute("style", "color:#f23118", "class","alert alert-danger","role","alert")
               errorDiv.appendChild(newDiv);
             }
           }
