@@ -12,6 +12,7 @@ mongo.connect('mongodb://127.0.0.1/mongochat', function(err, db){
     // Connect to Socket.io
     client.on('connection', function(socket){
         let chat = db.collection('chats');
+        let users = db.collection('users');
 
         // Create function to send status
         sendStatus = function(s){
@@ -59,5 +60,13 @@ mongo.connect('mongodb://127.0.0.1/mongochat', function(err, db){
                 socket.emit('cleared');
             });
         });
+
+        socket.on('signUp', function(data){
+            let username = data.username;
+            let password = data.password;
+
+            users.insert({username: username, password: password}, function(){
+              client.emit('registered');
+            })
     });
 });
