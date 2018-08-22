@@ -62,25 +62,30 @@ mongo.connect('mongodb://127.0.0.1/mongochat', function(err, db){
         });
 
         socket.on('signUp', function(data){
-            let username = data.username;
-            let password = data.password;
+            let un = data.username;
+            let pw = data.password;
 
-            users.insert({username: username, password: password}, function(){
+            users.insert({username: un, password: pw}, function(){
               client.emit('registered');
-            })
-          });
+            });
         });
 
         socket.on('login', function(data) {
           let username = data.username;
           let password = data.password;
 
-          if(users.find({username,password}).limit(1).size() > 0) {
-            socket.emit('authorized');
-          }
-          else {
-            socket.emit('unauthorized');
-          }
-          
-        })
+          users.find({username,password}).toArray(function(err, res) {
+            if(err) {
+              throw err;
+            }
+
+            if(res.length !== 0) {
+              socket.emit('authorized');
+            }
+            else {
+              socket.emit('unauthorized');
+            }
+          });
+        });
+      });
 });

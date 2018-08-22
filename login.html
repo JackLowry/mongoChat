@@ -36,6 +36,9 @@
 
     <script>
         function login() {
+
+          var socket = io.connect('http://127.0.0.1:4000');
+
           var username = document.getElementById("username").value;
           var password = document.getElementById("password").value;
           var errorString = "";
@@ -53,14 +56,21 @@
             for(var i = 0; i < errStrings.length-1; i++) {
               var newDiv = document.createElement("div");
               newDiv.textContent = errStrings[i];
-              newDiv.setAttribute("class","alert alert-danger","role","alert")
+              newDiv.setAttribute("class","alert alert-danger","role","alert");
               errorDiv.appendChild(newDiv);
             }
           }
           else {
-            socket.emit('login', {
-                username:username,
-                password:password
+            socket.emit('login', { username:username, password:password});
+            socket.on('authorized', function() {
+              document.cookie = "username=" + username + "; path=/";
+              window.location.href = "chat.html";
+            });
+            socket.on('unauthorized', function() {
+              var newDiv = document.createElement("div");
+              newDiv.textContent = "Your username and password do not match. Please try again.";
+              newDiv.setAttribute("class","alert alert-danger","role","alert");
+              errorDiv.appendChild(newDiv);
             });
           }
         }

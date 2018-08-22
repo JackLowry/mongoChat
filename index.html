@@ -69,8 +69,7 @@
             }
           }
           else {
-            socket.emit('signUp', {name:username,pw:password}, function() {
-              });
+            socket.emit('signUp', {username:username,password:password});
             socket.on('registered', function() {
                 document.cookie = "username=" + username + "; path=/";
                 window.location.href = "chat.html";
