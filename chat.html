@@ -38,8 +38,9 @@
     <script>
 
         (function(){
+
+            setInterval(updateScroll,1000);
             cookie = getCookie("username");
-            console.log(cookie);
             if(cookie === undefined || cookie === null) {
               window.location.href = "index.html";
             }
@@ -144,6 +145,11 @@
           var value = "; " + document.cookie;
           var parts = value.split("; " + name + "=");
           if (parts.length == 2) return parts.pop().split(";").shift();
+        }
+
+        function updateScroll(){
+          var element = document.getElementById("chat");
+          element.scrollTop = element.scrollHeight;
         }
     </script>
 </body>
