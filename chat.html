@@ -21,7 +21,7 @@
                 </h1>
 
                 <div id="chat" style="padding-top:20px">
-                    <div class="card" style="overflow-y:auto; overflow-x:hidden">
+                    <div id="messageBox" class="card" style="overflow-y:auto; overflow-x:hidden">
                         <div id="messages" class="card-block">
                         </div>
                     </div>
@@ -84,11 +84,12 @@
                         for(var x = 0;x < data.length;x++){
                             // Build out message div
                             var message = document.createElement('div');
-                            message.setAttribute('class', 'chat-message', 'style', 'display:flex; flex-wrap:]wrap');
+                            message.setAttribute('class', 'chat-message', 'style', 'display:flex; flex-wrap:]wrap','id','chatMessage');
                             message.textContent = data[x].name+": "+data[x].message;
                             messages.appendChild(message);
                         }
                     }
+                    messageBox.scrollTop=1000000;
                 });
 
                 // Get Status From Server
@@ -98,7 +99,7 @@
 
                     // If status is clear, clear text
                     if(data.clear){
-                        textarea.value = '';
+                        chatInput.value = '';
                     }
                 });
 
@@ -110,9 +111,12 @@
                         socket.emit('input', {
                             name:cookie,
                             message:chatInput.value
+
                         });
+
                         event.preventDefault();
                           chatInput.value="";
+
                     }
 
                 })
@@ -145,6 +149,22 @@
           var parts = value.split("; " + name + "=");
           if (parts.length == 2) return parts.pop().split(";").shift();
         }
+
+        //autoScroll (checks if scrolled to the bototm currently-doesn't work)
+    /*    var intervalID=window.setInterval(scrollMessages,1000)
+        function scrollMessages() {
+          if(document.getElementById("messages").lastChild.innerHTML.offsetParent!==null){
+            console.log("visible");
+          }
+
+         var temp = messageBox.scrollTop;
+          messageBox.scrollTop +=5;
+          if(temp=messageBox.scrollTop) {
+            //messageBox.scrollTop=messageBox.scrollTop+500;
+            console.log(messageBox.scrollTop);
+        };  */
+
+
     </script>
 </body>
 </html>
