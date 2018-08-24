@@ -65,8 +65,20 @@ mongo.connect('mongodb://127.0.0.1/mongochat', function(err, db){
             let un = data.username;
             let pw = data.password;
 
-            users.insert({username: un, password: pw}, function(){
-              client.emit('registered');
+
+            users.find({"username":un}).toArray(function(err, res) {
+              if(err) {
+                throw err;
+              }
+              console.log(res.length == 0);
+              if(res.length == 0) {
+                users.insert({username: un, password: pw}, function(){
+                  client.emit('registered');
+                });
+              }
+              else {
+                client.emit('username_taken');
+              }
             });
         });
 
@@ -79,7 +91,7 @@ mongo.connect('mongodb://127.0.0.1/mongochat', function(err, db){
               throw err;
             }
 
-            if(res.length !== 0) {
+            if(res.length == 0) {
               socket.emit('authorized');
             }
             else {

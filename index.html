@@ -74,6 +74,12 @@
                 document.cookie = "username=" + username + "; path=/";
                 window.location.href = "chat.html";
               });
+            socket.on('username_taken', function() {
+              var newDiv = document.createElement("div");
+              newDiv.textContent = "Username already taken";
+              newDiv.setAttribute("class","alert alert-danger","role","alert")
+              errorDiv.appendChild(newDiv);
+            })
           }
         }
 
