@@ -18,15 +18,11 @@
                   FRIENDS CLICK HERE
               </div>
               <div style="height: 500px; overflow-y:auto" class=row>
-<<<<<<< HEAD
                   <div class="col-md-6" id="servers">servers</div>
 
-=======
                   <div class="col-md-6" id="servers">
                   <button onclick="newServer()"></button>
-
                   </div>
->>>>>>> master
                   <div class="col-md-6" id=chats> chats</div>
               </div>
           </div>
@@ -54,9 +50,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
 
     <script>
-
         (function(){
 
+            cookie = getCookie("lastServer");
+            reload_chat()
             cookie = getCookie("username");
             if(cookie === undefined || cookie === null) {
               window.location.href = "index.html";
@@ -170,9 +167,6 @@
         }
 
         function goToFriends(){
-
-
-
           window.location.href="friends.html";
 
         }
@@ -190,28 +184,32 @@
             console.log(messageBox.scrollTop);
         };  */
         function newServer() {
-              var txt;
               var serverName = prompt("Enter the name of your new server:", "ex. BANANAMAN123");
-              if (person == null || person == "") {
-                txt = "Server request successfully cancelled.";
-                console.log(txt);
+              if (serverName == null || serverName == "") {
               } else {
-                txt = "Nice! We're making your server right now...";
-                console.log(txt);
                 socket.emit('create_server', {servername:serverName});
                 socket.on('server_created', function(){
-                  changeServer(serverName);
+                  reloadServer(serverName);
                 });
+
+                //TODO handle server name taken
               }
         }
+
         function changeServer(serverName) {
-          console.log("Server successfully created!");
           var server = document.createElement("div");
-          server.setAttribute("id","");
-          document.getElementById("servers").appendChild(server)
-          document.getElementById("messages").
-          socket.emit('reload', {servername:serverName});
+          server.setAtrribute("id", serverName);
+          document.getElementById("servers").appendChild(server);
+          var messagesDiv = document.getElementById("messages");
+
+          while(messagesDiv.firstChild) {
+            messagesDiv.removeChild(messagesDiv.firstChild);
+          }
+
+          socket.emit('reload_chat', {servername:serverName});
+
         }
+
     </script>
 </body>
 </html>
