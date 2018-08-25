@@ -13,7 +13,16 @@
 <body>
     <div class="container-fluids"style="padding-top:30px">
         <div class="row">
-            <div class="col-md-10 offset-md-1 col-sm-12">
+          <div class="col-md-2">
+              <div style="height:80px" onclick="goToFriends">
+                  FRIENDS CLICK HERE
+              </div>
+              <div style="height: 500px; overflow-y:auto" class=row>
+                  <div class="col-md-6" id="servers">servers </div>
+                  <div class="col-md-6" id=chats> chats</div>
+              </div>
+          </div>
+            <div class="col-md-9 col-sm-12">
                 <h1 class="text-center">
                     MongoChat
                     <button id="clear" class="btn btn-danger">Clear</button>
@@ -30,6 +39,7 @@
                 </div>
                 <div id="status"></div>
             </div>
+            <div class="col-md-1"> RIGHT DIV</div>
         </div>
     </div>
 
@@ -150,6 +160,9 @@
           if (parts.length == 2) return parts.pop().split(";").shift();
         }
 
+        function goToFriends(){
+          
+        }
         //autoScroll (checks if scrolled to the bototm currently-doesn't work)
     /*    var intervalID=window.setInterval(scrollMessages,1000)
         function scrollMessages() {
