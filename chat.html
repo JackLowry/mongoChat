@@ -18,8 +18,14 @@
                   FRIENDS CLICK HERE
               </div>
               <div style="height: 500px; overflow-y:auto" class=row>
+<<<<<<< HEAD
                   <div class="col-md-6" id="servers">servers</div>
 
+=======
+                  <div class="col-md-6" id="servers">
+                  <button onclick="newServer()"></button>
+                  </div>
+>>>>>>> master
                   <div class="col-md-6" id=chats> chats</div>
               </div>
           </div>
@@ -163,7 +169,11 @@
         }
 
         function goToFriends(){
+<<<<<<< HEAD
 
+=======
+          window.location.href="friends.html";
+>>>>>>> master
         }
         //autoScroll (checks if scrolled to the bototm currently-doesn't work)
     /*    var intervalID=window.setInterval(scrollMessages,1000)
@@ -178,7 +188,21 @@
             //messageBox.scrollTop=messageBox.scrollTop+500;
             console.log(messageBox.scrollTop);
         };  */
-
+        function newServer() {
+              var txt;
+              var person = prompt("Enter the name of your new server:", "ex. BANANAMAN123");
+              if (person == null || person == "") {
+                txt = "Server request successfully cancelled.";
+                console.log(txt);
+              } else {
+                txt = "Nice! We're making your server right now...";
+                console.log(txt);
+                socket.emit('create_server', {servername:txt});
+                socket.on('server_created', function(){
+                  console.log("Server successfully created!");
+                });
+              }
+        }
 
     </script>
 </body>
