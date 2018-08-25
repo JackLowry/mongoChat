@@ -20,6 +20,7 @@
               <div style="height: 500px; overflow-y:auto" class=row>
                   <div class="col-md-6" id="servers">
                   <button onclick="newServer()"></button>
+
                   </div>
                   <div class="col-md-6" id=chats> chats</div>
               </div>
@@ -180,20 +181,27 @@
         };  */
         function newServer() {
               var txt;
-              var person = prompt("Enter the name of your new server:", "ex. BANANAMAN123");
+              var serverName = prompt("Enter the name of your new server:", "ex. BANANAMAN123");
               if (person == null || person == "") {
                 txt = "Server request successfully cancelled.";
                 console.log(txt);
               } else {
                 txt = "Nice! We're making your server right now...";
                 console.log(txt);
-                socket.emit('create_server', {servername:txt});
+                socket.emit('create_server', {servername:serverName});
                 socket.on('server_created', function(){
-                  console.log("Server successfully created!");
+                  changeServer(serverName);
                 });
               }
         }
-
+        function changeServer(serverName) {
+          console.log("Server successfully created!");
+          var server = document.createElement("div");
+          server.setAttribute("id","");
+          document.getElementById("servers").appendChild(server)
+          document.getElementById("messages").
+          socket.emit('reload', {servername:serverName});
+        }
     </script>
 </body>
 </html>
