@@ -19,21 +19,29 @@
               </div>
               <div style="height: 1000px; overflow-y:auto" class=row>
                   <div class="col-md-6" id="servers">
-                      <div class="card" style="width: 5.9rem;">
+                      <center><div class="card text-center" style="width: 5.9rem;">
                           <div style="padding-left:18px" class="card-header">Servers</div>
-                          <div class="card-body">
-                            <h5 class="card-title"></h5>
-                            <button style="height:60px;width:91px" type="button" class="btn btn-outline-primary" onclick="newServer()">New<br>Server</button>
-                          </div>
+                          <button style="height:60px;width:91px" type="button" class="btn btn-outline-primary" onclick="newServer()">New<br>Server</button>
+                            <ul class="list-group">
+                                <li class="list-group-item">Server1</li>
+                                <li class="list-group-item">Server2</li>
+                                <li class="list-group-item">Server3</li>
+                            </ul>
+                              <!--The newServer thing should create a new <li>, name it the name, and either link the div or make a button, that will...   -->
+
                       </div>
+                    </center>
                   </div>
                   <div class="col-md-6" id="channels">
-                  <div class="card" style="width: 5.9rem;">
+                      <center><div class="card text-center" style="width: 5.9rem;">
                       <div style="padding-left:10px" class="card-header">Channels</div>
-                      <div class="card-body">
-                        <h5 class="card-title"></h5>
-                      </div>
+                      <ul class="list-group">
+                          <li style="padding-left: 0px" class="list-group-item">Channel1</li>
+                          <li class="list-group-item">Channel2</li>
+                          <li class="list-group-item">Channel3</li>
+                      </ul>
                   </div>
+                </center>
                 </div>
               </div>
           </div>
