@@ -17,11 +17,26 @@
               <div style="height:80px" onclick="goToFriends">
                   <center><button id="goToFriends" class="btn btn-warning">Friends</button></center>
               </div>
-              <div style="height: 500px; overflow-y:auto" class=row>
-                  <div class="col-md-6" id="servers">servers
-                    <button style="height:60px;width:90px" type="button" class="btn btn-outline-primary" onclick="newServer()">New <br> Server</button>
+              <div style="height: 1000px; overflow-y:auto" class=row>
+                  <div class="col-md-6" id="servers">
+                      <div class="card" style="width: 5.9rem;">
+                          <div class="card-header">Servers</div>
+                          <div class="card-body">
+                            <h5 class="card-title"></h5>
+                            <button style="height:60px;width:91px" type="button" class="btn btn-outline-primary" onclick="newServer()">New<br>Server</button>
+                          </div>
+                      </div>
                   </div>
-                  <div class="col-md-6" id=chats> chats</div>
+                  <div class="col-md-6" id="channels">
+                  <div class="card" style="width: 5.9rem;">
+                      <div class="card-header">
+                        Channels
+                      </div>
+                      <div class="card-body">
+                        <h5 class="card-title"></h5>
+                      </div>
+                  </div>
+                </div>
               </div>
           </div>
             <div class="col-md-9 col-sm-12">
