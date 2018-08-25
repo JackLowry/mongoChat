@@ -8,6 +8,18 @@
     <title>MongoChat</title>
     <style>
         #messages{height:500px;}
+.fade.in {
+  opacity: 1;
+}
+.modal.in .modal-dialog {
+  -webkit-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
+.modal-backdrop.in {
+  opacity: 0.5;
+}
+
     </style>
 </head>
 <body>
@@ -16,7 +28,7 @@
           <div class="col-md-2">
               <div style="height:500px;overflow-y: auto">
                   <center><input style="width: 220px"id="friendSearch" class="form-control" placeholder="Search a username..."></input></center>
-
+                    
                   list of friends card thing
               </div>
           </div>
