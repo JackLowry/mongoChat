@@ -53,7 +53,7 @@
         (function(){
 
             cookie = getCookie("lastServer");
-            reload_chat()
+            changeServer(cookie);
             cookie = getCookie("username");
             if(cookie === undefined || cookie === null) {
               window.location.href = "index.html";
@@ -207,6 +207,9 @@
           }
 
           socket.emit('reload_chat', {servername:serverName});
+
+
+          document.cookie = "lastServer=" + serverName + "; path=/";
 
         }
 
