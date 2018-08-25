@@ -11,7 +11,6 @@ mongo.connect('mongodb://127.0.0.1/mongochat', function(err, db){
 
     // Connect to Socket.io
     client.on('connection', function(socket){
-        let chat = db.collection('chats');
         let users = db.collection('users');
 
         // Create function to send status
@@ -20,13 +19,15 @@ mongo.connect('mongodb://127.0.0.1/mongochat', function(err, db){
         }
 
         // Get chats from mongo collection
-        chat.find().limit(100).sort({_id:1}).toArray(function(err, res){
-            if(err){
-                throw err;
-            }
+        socket.on('reload_chat', function(data){
+          db.collection(data.username).find().limit(100).sort({_id:1}).toArray(function(err, res){
+              if(err){
+                  throw err;
+              }
 
-            // Emit the messages
-            socket.emit('output', res);
+              // Emit the messages
+              socket.emit('output', res);
+          });
         });
 
         // Handle input events
@@ -81,6 +82,11 @@ mongo.connect('mongodb://127.0.0.1/mongochat', function(err, db){
             });
         });
 
+        socket.on('create_server', function(data) {
+          let servername = data.servername;
+          let newServer = createServer();
+        });
+
         socket.on('login', function(data) {
           let username = data.username;
           let password = data.password;
@@ -98,5 +104,35 @@ mongo.connect('mongodb://127.0.0.1/mongochat', function(err, db){
             }
           });
         });
+
+        socket.on('create_server',function(){
+
+        })
       });
+
+      function createServer(serverName) {
+        db.getCollectionNames(function(err, res){
+          if(err) {
+            throw err;
+          }
+
+          var created = false;
+          for(var i = 0; i < res.length; i++) {
+              if(serverName == res[i]) {
+                created = true;
+                break;
+              }
+          }
+
+          if(created) {
+            socket.emit('server_name_taken');
+          }
+          else {
+            let newServer = db.collection(serverName);
+            newServer.insert({chat:{}}, function() {
+              socket.emit('server_created');
+            });
+          }
+      });
+    }
 });
