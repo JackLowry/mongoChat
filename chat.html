@@ -18,28 +18,22 @@
                   <center><button id="goToFriends" class="btn btn-warning">Friends</button></center>
               </div>
               <div style="height: 1000px; overflow-y:auto" class=row>
-                  <div class="col-md-6" id="servers">
-                      <center><div class="card text-center" style="width: 5.9rem;">
+                  <div class="col-md-6" id="servers" style="padding-right:0px; padding-left:30px">
+                      <center><div class="card text-center" style="width: 8rem;">
                           <div style="padding-left:18px" class="card-header">Servers</div>
-                          <button style="height:60px;width:91px" type="button" class="btn btn-outline-primary" onclick="newServer()">New<br>Server</button>
-                            <ul class="list-group">
-                                <li class="list-group-item">Server1</li>
-                                <li class="list-group-item">Server2</li>
-                                <li class="list-group-item">Server3</li>
-                            </ul>
-                              <!--The newServer thing should create a new <li>, name it the name, and either link the div or make a button, that will...   -->
+                          <button style="height:60px;width:126px" type="button" class="btn btn-outline-primary" onclick="newServer()">New<br>Server</button>
+                          <button style="height:60px;width:126px" type="button" class="btn btn-outline-success" onclick="">Example<br>Server</button>
+                          <button style="height:60px;width:126px" type="button" class="btn btn-outline-success" onclick="">Example<br>Server2</button>
+                              <!--The newServer thing should create a new button, name it the name, and link it to redirect the server to the storage area for that server-->
 
                       </div>
                     </center>
                   </div>
-                  <div class="col-md-6" id="channels">
-                      <center><div class="card text-center" style="width: 5.9rem;">
+                  <div class="col-md-6" id="channels" style="padding-left:15px;padding-right:0px">
+                      <center><div class="card text-center" style="width: 8rem;">
                       <div style="padding-left:10px" class="card-header">Channels</div>
-                      <ul class="list-group">
-                          <li style="padding-left: 0px" class="list-group-item">Channel1</li>
-                          <li class="list-group-item">Channel2</li>
-                          <li class="list-group-item">Channel3</li>
-                      </ul>
+                      <button style="height:60px;width:126px" type="button" class="btn btn-outline-info" onclick="">Example<br>Channel</button>
+                      <button style="height:60px;width:126px" type="button" class="btn btn-outline-info" onclick="">Example<br>Channel2</button>
                   </div>
                 </center>
                 </div>
@@ -62,7 +56,14 @@
                 </div>
                 <div id="status"></div>
             </div>
-            <div class="col-md-2"> RIGHT DIV</div>
+            <div class="col-md-2" style="padding-right:30px;padding-left:0px">
+              <center><div class="card text-center" style="width: 15rem;">
+              <div style="padding-left:10px" class="card-header">Users in this chat</div>
+              <button style="height:60px;width:240px" type="button" class="btn btn-outline-success" onclick="">User1</button>
+              <button style="height:60px;width:240px" type="button" class="btn btn-outline-success" onclick="">User2</button>
+          </div>
+        </center>
+            </div>
         </div>
     </div>
 
