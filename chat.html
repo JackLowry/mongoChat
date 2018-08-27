@@ -96,11 +96,16 @@
             <div class="col-md-2" style="padding-right:30px;padding-left:0px">
               <center><div class="card text-center" style="width: 15rem;">
               <div style="padding-left:10px" class="card-header">Users in this chat</div>
-              <a tabindex="0" class="btn btn-outline-success"style="height:60px;width:240px" role="button" data-toggle="popover" data-trigger="focus" title="User1" data-content="Stuff about the user or a button that says add as friend">User1</a>
-              <a id="userPop"tabindex="0" class="btn btn-outline-success"style="height:60px;width:240px" role="button" data-toggle="popover" data-trigger="focus" data-html="true" title="User2" >User2</a>
+              <a id="userPop1"tabindex="0" class="btn btn-outline-success"style="height:60px;width:240px" role="button" data-toggle="popover" data-trigger="focus" data-html="true" title="User1" >User2</a>
+              <a id="userPop2"tabindex="0" class="btn btn-outline-success"style="height:60px;width:240px" role="button" data-toggle="popover" data-trigger="focus" data-html="true" title="User2" >User2</a>
               <script>
                 var popupElement = '<div><button type="button" class="btn btn-dark">Add friend</button></div>';
-                $('#userPop').popover({
+                $('#userPop1').popover({
+                  animation: true,
+                  content: popupElement,
+                  html: true
+                });
+                $('#userPop2').popover({
                   animation: true,
                   content: popupElement,
                   html: true
