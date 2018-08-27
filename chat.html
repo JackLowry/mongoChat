@@ -1,10 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+
+
     <title>MongoChat</title>
     <style>
         #messages{height:500px;}
@@ -15,15 +22,45 @@
         <div class="row">
           <div class="col-md-2">
               <div style="height:80px" onclick="goToFriends">
-                  <center><button id="goToFriends" class="btn btn-warning">Friends</button></center>
+                  <center><button id="goToFriends" class="btn btn-dark">Friends</button></center>
               </div>
               <div style="height: 1000px; overflow-y:auto" class=row>
                   <div class="col-md-6" id="servers" style="padding-right:0px; padding-left:30px">
                       <center><div class="card text-center" style="width: 8rem;">
                           <div style="padding-left:18px" class="card-header">Servers</div>
-                          <button style="height:60px;width:126px" type="button" class="btn btn-outline-primary" onclick="newServer()">New<br>Server</button>
+
+
+<!-- MODAL INBOUND-->
+<button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal" style="height:60px;width:126px" >New<br> Server</button>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+        <h3 class="modal-title" id="exampleModalLabel">Create a new server</h3>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="form-group">
+          <label for="recipient-name" class="col-form-label">Server name:</label>
+          <input type="text" placeholder="Name this server"  class="form-control" id="recipient-name">
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      <button type="button" class="btn btn-primary">Create server</button>
+    </div>
+  </div>
+</div>
+</div>
+<!-- MODAL OVER-->
+
                           <button style="height:60px;width:126px" type="button" class="btn btn-outline-success" onclick="">Example<br>Server</button>
                           <button style="height:60px;width:126px" type="button" class="btn btn-outline-success" onclick="">Example<br>Server2</button>
+
                               <!--The newServer thing should create a new button, name it the name, and link it to redirect the server to the storage area for that server-->
 
                       </div>
@@ -59,8 +96,18 @@
             <div class="col-md-2" style="padding-right:30px;padding-left:0px">
               <center><div class="card text-center" style="width: 15rem;">
               <div style="padding-left:10px" class="card-header">Users in this chat</div>
-              <button style="height:60px;width:240px" type="button" class="btn btn-outline-success" onclick="">User1</button>
-              <button style="height:60px;width:240px" type="button" class="btn btn-outline-success" onclick="">User2</button>
+              <a tabindex="0" class="btn btn-outline-success"style="height:60px;width:240px" role="button" data-toggle="popover" data-trigger="focus" title="User1" data-content="Stuff about the user or a button that says add as friend">User1</a>
+              <a id="userPop"tabindex="0" class="btn btn-outline-success"style="height:60px;width:240px" role="button" data-toggle="popover" data-trigger="focus" data-html="true" title="User2" >User2</a>
+              <script>
+                var popupElement = '<div><button type="button" class="btn btn-dark">Add friend</button></div>';
+                $('#userPop').popover({
+                  animation: true,
+                  content: popupElement,
+                  html: true
+                });
+              </script>
+
+
           </div>
         </center>
             </div>
@@ -70,6 +117,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
 
     <script>
+  //  document.getElementById("popover").popover(); //popover() not recognized, hmmmmm  //TODO -reference popover.js thing in hmtl at top
+  $("[data-toggle=popover]").popover();
         (function(){
 
             cookie = getCookie("lastServer");
@@ -236,5 +285,5 @@
         }
 
     </script>
-</body>
+    </body>
 </html>
