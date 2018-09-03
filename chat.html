@@ -138,6 +138,7 @@
             var clearBtn = element('clear');
             var logoutBtn = element('logout');
             var createServerBtn = element('create_server');
+            var goToFriendsBtn = element('goToFriends');
 
             // Set default status
             var statusDefault = status.textContent;
@@ -158,17 +159,19 @@
 
             // Check for connection
             if(socket !== undefined){
-              var cookie = getCookie("username");
-              if(cookie === undefined || cookie === null) {
+              var usernameCookie = getCookie("username");
+              console.log(usernameCookie);
+              if(usernameCookie === undefined || usernameCookie === null) {
                 window.location.href = "index.html";
               }
 
-              cookie = getCookie("lastServer");
-              if(cookie) {
-                cookie="Math";
+              var serverCookie = getCookie("lastServer");
+              console.log(serverCookie);
+              if(serverCookie) {
+                serverCookie="Math";
               }
 
-              changeServer(cookie);
+              changeServer(serverCookie);
 
               console.log('Connected to socket...');
 
@@ -205,14 +208,12 @@
 
                       // Emit to server input
                       socket.emit('input', {
-                          name:cookie,
+                          name:usernameCookie,
                           message:chatInput.value
 
                       });
-
                       event.preventDefault();
                         chatInput.value="";
-
                   }
 
               })
@@ -271,7 +272,7 @@
               messagesDiv.removeChild(messagesDiv.firstChild);
             }
 
-            socket.emit('reload_chat', {servername:serverName});
+            socket.emit('change_server', {servername:serverName});
 
             document.cookie = "lastServer=" + serverName + "; path=/";
           }
