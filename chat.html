@@ -45,21 +45,18 @@
       <form>
         <div class="form-group">
           <label for="recipient-name" class="col-form-label">Server name:</label>
-          <input type="text" placeholder="Name this server"  class="form-control" id="recipient-name">
+          <input type="text" placeholder="Name this server"  class="form-control" id="new_server_name">
         </div>
       </form>
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      <button type="button" class="btn btn-primary">Create server</button>
+      <button type="button" id="new_server_btn" class="btn btn-primary">Create server</button>
     </div>
   </div>
 </div>
 </div>
 <!-- MODAL OVER-->
-
-                          <button style="height:60px;width:126px" type="button" class="btn btn-outline-success" onclick="">Example<br>Server</button>
-                          <button style="height:60px;width:126px" type="button" class="btn btn-outline-success" onclick="">Example<br>Server2</button>
 
                               <!--The newServer thing should create a new button, name it the name, and link it to redirect the server to the storage area for that server-->
 
@@ -139,6 +136,7 @@
             var logoutBtn = element('logout');
             var createServerBtn = element('create_server');
             var goToFriendsBtn = element('goToFriends');
+            var newServerBtn = element('new_server_btn');
 
             // Set default status
             var statusDefault = status.textContent;
@@ -237,6 +235,16 @@
               socket.on('cleared', function(){
                   messages.textContent = '';
               });
+
+              newServerBtn.addEventListener('click', function(){
+                var newServerName = document.getElementById("new_server_name").value;
+                socket.emit('create_server', {servername:newServerName});
+                socket.on('server_created', function(){
+                  changeServer(newServerName);
+                });
+
+                  //TODO handle server name taken
+              });
           }
 
           function getCookie(name) {
@@ -249,22 +257,10 @@
             window.location.href="friends.html";
           }
 
-          function newServer() {
-            var serverName = prompt("Enter the name of your new server:", "ex. BANANAMAN123");
-            if (serverName == null || serverName == "") {
-            } else {
-              socket.emit('create_server', {servername:serverName});
-              socket.on('server_created', function(){
-                reloadServer(serverName);
-              });
-
-              //TODO handle server name taken
-            }
-          }
-
           function changeServer(serverName) {
-            var serverDiv = document.createElement("div");
-            serverDiv.setAttribute("id", serverName);
+            var serverDiv = document.createElement("button");
+            serverDiv.setAttribute("id", serverName, "style", "height:60px;width:126px", "type", "button", "class","btn btn-outline-success", "onclick", "changeServer(" + serverName + ")");
+            serverDiv.textContent = serverName;
             document.getElementById("servers").appendChild(serverDiv);
             var messagesDiv = document.getElementById("messages");
 

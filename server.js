@@ -93,7 +93,7 @@ mongo.connect('mongodb://127.0.0.1/mongochat', function(err, db){
           let username = data.username;
           let password = data.password;
 
-          usdb.collection("users").find({username,password}).toArray(function(err, res) {
+          db.collection("users").find({username,password}).toArray(function(err, res) {
             if(err) {
               throw err;
             }
