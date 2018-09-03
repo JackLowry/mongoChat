@@ -11,7 +11,8 @@ mongo.connect('mongodb://127.0.0.1/mongochat', function(err, db){
 
     // Connect to Socket.io
     client.on('connection', function(socket){
-        let users = db.collection('users');
+        var currentServer = null;
+        let users = db.collection('Math');
 
         // Create function to send status
         sendStatus = function(s){
@@ -20,12 +21,21 @@ mongo.connect('mongodb://127.0.0.1/mongochat', function(err, db){
 
         // Get chats from mongo collection
         socket.on('reload_chat', function(data){
-          db.collection(data.username).find().limit(100).sort({_id:1}).toArray(function(err, res){
+          currentServer = db.collection(data.servername);
+          console.log(data.servername);
+          currentServer.find({}).toArray(function(err, res){
               if(err){
                   throw err;
               }
-              // Emit the messages
-              socket.emit('output', res);
+              var chatArray = res[0].chat;
+
+              for(var x = 0; x < 100; x++) {
+                if(x = chatArray.length) {
+                  break;
+                }
+
+                socket.emit('output', chatArray[x]);
+              }
           });
         });
 
@@ -40,7 +50,8 @@ mongo.connect('mongodb://127.0.0.1/mongochat', function(err, db){
                 sendStatus('Please enter a message');
             } else {
                 // Insert message
-                chat.insert({name: name, message: message}, function(){
+                currentServer.update(
+                  {id: currentServer  , message: message}, function(){
                     client.emit('output', [data]);
 
                     // Send status object
@@ -55,7 +66,7 @@ mongo.connect('mongodb://127.0.0.1/mongochat', function(err, db){
         // Handle clear
         socket.on('clear', function(data){
             // Remove all chats from collection
-            chat.remove({}, function(){
+            currentServer.chat.remove({}, function(){
                 // Emit cleared
                 socket.emit('cleared');
             });
@@ -128,7 +139,7 @@ mongo.connect('mongodb://127.0.0.1/mongochat', function(err, db){
           }
           else {
             let newServer = db.collection(serverName);
-            newServer.insert({chat:{}}, function() {
+            newServer.insert({chat:[]}, function() {
               socket.emit('server_created');
             });
           }

@@ -126,12 +126,6 @@
   $("[data-toggle=popover]").popover();
         (function(){
 
-            cookie = getCookie("lastServer");
-            changeServer(cookie);
-            cookie = getCookie("username");
-            if(cookie === undefined || cookie === null) {
-              window.location.href = "index.html";
-            }
 
             var element = function(id){
                 return document.getElementById(id);
@@ -164,85 +158,129 @@
 
             // Check for connection
             if(socket !== undefined){
-                console.log('Connected to socket...');
+              var cookie = getCookie("username");
+              if(cookie === undefined || cookie === null) {
+                window.location.href = "index.html";
+              }
 
-                // Handle Output
-                socket.on('output', function(data){
-                    //console.log(data);
-                    console.log(data.length);
-                    if(data.length){
-                        for(var x = 0;x < data.length;x++){
-                            // Build out message div
-                            var message = document.createElement('div');
-                            message.setAttribute('class', 'chat-message', 'style', 'display:flex; flex-wrap:]wrap','id','chatMessage');
-                            message.textContent = data[x].name+": "+data[x].message;
-                            messages.appendChild(message);
-                        }
-                    }
-                    messageBox.scrollTop=1000000;
-                });
+              cookie = getCookie("lastServer");
+              if(cookie) {
+                cookie="Math";
+              }
 
-                // Get Status From Server
-                socket.on('status', function(data){
-                    // get message status
-                    setStatus((typeof data === 'object')? data.message : data);
+              changeServer(cookie);
 
-                    // If status is clear, clear text
-                    if(data.clear){
-                        chatInput.value = '';
-                    }
-                });
+              console.log('Connected to socket...');
 
-                // Handle Input
-                chatInput.addEventListener('keydown', function(event){
-                    if(event.which === 13 && event.shiftKey == false){
+              // Handle Output
+              socket.on('output', function(data){
+                  //console.log(data);
+                  console.log(data.length);
+                  if(data.length){
+                      for(var x = 0;x < data.length;x++){
+                          // Build out message div
+                          var message = document.createElement('div');
+                          message.setAttribute('class', 'chat-message', 'style', 'display:flex; flex-wrap:]wrap','id','chatMessage');
+                          message.textContent = data[x].name+": "+data[x].message;
+                          messages.appendChild(message);
+                      }
+                  }
+                  messageBox.scrollTop=1000000;
+              });
 
-                        // Emit to server input
-                        socket.emit('input', {
-                            name:cookie,
-                            message:chatInput.value
+              // Get Status From Server
+              socket.on('status', function(data){
+                  // get message status
+                  setStatus((typeof data === 'object')? data.message : data);
 
-                        });
+                  // If status is clear, clear text
+                  if(data.clear){
+                      chatInput.value = '';
+                  }
+              });
 
-                        event.preventDefault();
-                          chatInput.value="";
+              // Handle Input
+              chatInput.addEventListener('keydown', function(event){
+                  if(event.which === 13 && event.shiftKey == false){
 
-                    }
+                      // Emit to server input
+                      socket.emit('input', {
+                          name:cookie,
+                          message:chatInput.value
 
-                })
+                      });
 
-                // Handle Chat Clear
-                clearBtn.addEventListener('click', function(){
-                    socket.emit('clear');
-                });
+                      event.preventDefault();
+                        chatInput.value="";
 
-                logoutBtn.addEventListener('click', function() {
-                    function deleteCookie(callback) {
-                      document.cookie = null;
-                      callback();
-                    }
-                    deleteCookie(function() {
-                      window.location.href = "login.html";
-                    });
-                });
+                  }
 
-                // Clear Message
-                socket.on('cleared', function(){
-                    messages.textContent = '';
-                });
+              })
+
+              // Handle Chat Clear
+              clearBtn.addEventListener('click', function(){
+                  socket.emit('clear');
+              });
+
+              logoutBtn.addEventListener('click', function() {
+                  function deleteCookie(callback) {
+                    document.cookie = null;
+                    callback();
+                  }
+                  deleteCookie(function() {
+                    window.location.href = "login.html";
+                  });
+              });
+
+              // Clear Message
+              socket.on('cleared', function(){
+                  messages.textContent = '';
+              });
+          }
+
+          function getCookie(name) {
+            var value = "; " + document.cookie;
+            var parts = value.split("; " + name + "=");
+            if (parts.length == 2) return parts.pop().split(";").shift();
+          }
+
+          function goToFriends(){
+            window.location.href="friends.html";
+          }
+
+          function newServer() {
+            var serverName = prompt("Enter the name of your new server:", "ex. BANANAMAN123");
+            if (serverName == null || serverName == "") {
+            } else {
+              socket.emit('create_server', {servername:serverName});
+              socket.on('server_created', function(){
+                reloadServer(serverName);
+              });
+
+              //TODO handle server name taken
+            }
+          }
+
+          function changeServer(serverName) {
+            var serverDiv = document.createElement("div");
+            serverDiv.setAttribute("id", serverName);
+            document.getElementById("servers").appendChild(serverDiv);
+            var messagesDiv = document.getElementById("messages");
+
+            while(messagesDiv.firstChild) {
+              messagesDiv.removeChild(messagesDiv.firstChild);
             }
 
-        })();
+            socket.emit('reload_chat', {servername:serverName});
 
-        function getCookie(name) {
-          var value = "; " + document.cookie;
-          var parts = value.split("; " + name + "=");
-          if (parts.length == 2) return parts.pop().split(";").shift();
-        }
+            document.cookie = "lastServer=" + serverName + "; path=/";
+          }
 
-        goToFriendsBtn.addEventListener('click', function(){
+          goToFriendsBtn.addEventListener('click', function(){
           window.location.href="friends.html";
-        });
+          });
+
+        })();
 
 
 
@@ -259,35 +297,6 @@
             //messageBox.scrollTop=messageBox.scrollTop+500;
             console.log(messageBox.scrollTop);
         };  */
-        function newServer() {
-              var serverName = prompt("Enter the name of your new server:", "ex. BANANAMAN123");
-              if (serverName == null || serverName == "") {
-              } else {
-                socket.emit('create_server', {servername:serverName});
-                socket.on('server_created', function(){
-                  reloadServer(serverName);
-                });
-
-                //TODO handle server name taken
-              }
-        }
-
-        function changeServer(serverName) {
-          var serverDiv = document.createElement("div");
-          serverDiv.setAttribute("id", serverName);
-          document.getElementById("servers").appendChild(server);
-          var messagesDiv = document.getElementById("messages");
-
-          while(messagesDiv.firstChild) {
-            messagesDiv.removeChild(messagesDiv.firstChild);
-          }
-
-          socket.emit('reload_chat', {servername:serverName});
-
-
-          document.cookie = "lastServer=" + serverName + "; path=/";
-
-        }
 
     </script>
     </body>
