@@ -240,6 +240,10 @@
                 var newServerName = document.getElementById("new_server_name").value;
                 socket.emit('create_server', {servername:newServerName});
                 socket.on('server_created', function(){
+                  var serverDiv = document.createElement("button");
+                  serverDiv.setAttribute("id", newServerName, "style", "height:60px;width:126px", "type", "button", "class","btn btn-outline-success", "onclick", "changeServer(" + newServerName + ")");
+                  serverDiv.textContent = newServerName;
+                  document.getElementById("servers").appendChild(serverDiv);
                   changeServer(newServerName);
                 });
 
@@ -258,10 +262,6 @@
           }
 
           function changeServer(serverName) {
-            var serverDiv = document.createElement("button");
-            serverDiv.setAttribute("id", serverName, "style", "height:60px;width:126px", "type", "button", "class","btn btn-outline-success", "onclick", "changeServer(" + serverName + ")");
-            serverDiv.textContent = serverName;
-            document.getElementById("servers").appendChild(serverDiv);
             var messagesDiv = document.getElementById("messages");
 
             while(messagesDiv.firstChild) {

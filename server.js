@@ -109,30 +109,32 @@ mongo.connect('mongodb://127.0.0.1/mongochat', function(err, db){
 
         socket.on('create_server',function(data){
             createServer(data.serverName);
-        })
+        });
+        
+        function createServer(serverName) {
+          db.listCollections().toArray(function(err, res){
+            if(err) {
+              throw err;
+            }
+
+            var created = false;
+            for(var i = 0; i < res.length; i++) {
+                if(serverName == res[i]) {
+                  created = true;
+                  break;
+                }
+            }
+
+            if(created) {
+              socket.emit('server_name_taken');
+            }
+            else {
+              currentServer = serverName;
+              socket.emit('server_created');
+            }
+          });
+        }
       });
 
-      function createServer(serverName) {
-        db.getCollectionNames(function(err, res){
-          if(err) {
-            throw err;
-          }
 
-          var created = false;
-          for(var i = 0; i < res.length; i++) {
-              if(serverName == res[i]) {
-                created = true;
-                break;
-              }
-          }
-
-          if(created) {
-            socket.emit('server_name_taken');
-          }
-          else {
-            currentServer = serverName;
-            socket.emit('server_created');
-          }
-        });
-      }
     });
