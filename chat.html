@@ -31,32 +31,32 @@
 
 
 <!-- MODAL INBOUND-->
-<button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal" style="height:60px;width:126px" >New<br> Server</button>
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-<div class="modal-dialog" role="document">
-  <div class="modal-content">
-    <div class="modal-header">
-        <h3 class="modal-title" id="exampleModalLabel">Create a new server</h3>
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <form>
-        <div class="form-group">
-          <label for="recipient-name" class="col-form-label">Server name:</label>
-          <input type="text" placeholder="Name this server"  class="form-control" id="new_server_name">
-        </div>
-      </form>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      <button type="button" id="new_server_btn" class="btn btn-primary">Create server</button>
-    </div>
-  </div>
-</div>
-</div>
-<!-- MODAL OVER-->
+                          <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal" style="height:60px;width:126px" >New<br> Server</button>
+                          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                  <h3 class="modal-title" id="exampleModalLabel">Create a new server</h3>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                <form>
+                                  <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">Server name:</label>
+                                    <input type="text" placeholder="Name this server"  class="form-control" id="new_server_name">
+                                  </div>
+                                </form>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" id="new_server_btn" class="btn btn-primary">Create server</button>
+                              </div>
+                            </div>
+                          </div>
+                          </div>
+                          <!-- MODAL OVER-->
 
                               <!--The newServer thing should create a new button, name it the name, and link it to redirect the server to the storage area for that server-->
 
@@ -279,6 +279,15 @@
             socket.emit('change_server', {servername:serverName});
 
             document.cookie = "lastServer=" + serverName + "; path=/";
+
+            socket.on('server_changed', function(data) {
+              for(var i = 0; i < data.length; i++) {
+                var serverDiv = document.createElement("button");
+                serverDiv.setAttribute("id", data[i], "style", "height:60px;width:126px", "type", "button", "class","btn btn-outline-success", "onclick", "changeServer(" + data[i] + ")");
+                serverDiv.textContent = data[i];
+                document.getElementById("servers").appendChild(serverDiv);
+              }
+            });
           }
 
           goToFriendsBtn.addEventListener('click', function(){
