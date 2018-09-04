@@ -22,13 +22,15 @@ mongo.connect('mongodb://127.0.0.1/mongochat', function(err, db){
         socket.on('change_server', function(data){
           currentServer = data.servername;
 
-          db.collection(currentServer + "_chat").find().limit(100).sort({_id:1}).toArray(function(err, res){
+          db.collection(currentServer + "_chat*").find().limit(100).sort({_id:1}).toArray(function(err, res){
               if(err){
                   throw err;
               }
 
                 socket.emit('output', res);
           });
+
+          socket.emit(getServerNames());
         });
 
         // Handle input events
@@ -42,7 +44,7 @@ mongo.connect('mongodb://127.0.0.1/mongochat', function(err, db){
                 sendStatus('Please enter a message');
             } else {
                 // Insert message
-                db.collection(currentServer + "_chat").insert({name:name, message: message}, function() {
+                db.collection(currentServer + "_chat*").insert({name:name, message: message}, function() {
                     client.emit('output', [data]);
 
                     // Send status object
@@ -57,7 +59,7 @@ mongo.connect('mongodb://127.0.0.1/mongochat', function(err, db){
         // Handle clear
         socket.on('clear', function(data){
             // Remove all chats from collection
-            db.collection(currentServer + "_chat").remove({}, function(){
+            db.collection(currentServer + "_chat*").remove({}, function(){
                 // Emit cleared
                 socket.emit('cleared');
             });
@@ -68,7 +70,7 @@ mongo.connect('mongodb://127.0.0.1/mongochat', function(err, db){
             let pw = data.password;
 
 
-            db.collection("users").find({"username":un}).toArray(function(err, res) {
+            db.collection("users*").find({"username":un}).toArray(function(err, res) {
               if(err) {
                 throw err;
               }
@@ -84,16 +86,11 @@ mongo.connect('mongodb://127.0.0.1/mongochat', function(err, db){
             });
         });
 
-        socket.on('create_server', function(data) {
-          let servername = data.servername;
-          let newServer = createServer();
-        });
-
         socket.on('login', function(data) {
           let username = data.username;
           let password = data.password;
 
-          db.collection("users").find({username,password}).toArray(function(err, res) {
+          db.collection("users*").find({username,password}).toArray(function(err, res) {
             if(err) {
               throw err;
             }
@@ -110,12 +107,13 @@ mongo.connect('mongodb://127.0.0.1/mongochat', function(err, db){
         socket.on('create_server',function(data){
             createServer(data.serverName);
         });
-        
+
         function createServer(serverName) {
           db.listCollections().toArray(function(err, res){
             if(err) {
               throw err;
             }
+
 
             var created = false;
             for(var i = 0; i < res.length; i++) {
@@ -132,6 +130,29 @@ mongo.connect('mongodb://127.0.0.1/mongochat', function(err, db){
               currentServer = serverName;
               socket.emit('server_created');
             }
+          });
+        }
+
+        function getServerNames() {
+          db.listCollections().toArray(function(err, res){
+            if(err) {
+              throw err;
+            }
+
+            nameSet = new Set();
+
+            for(var x = 0; x < res.length; x++) {
+              var name = res[x].name.substring(0, res[x].name.indexOf('_chat*'));
+
+              if(!(name === "users*")) {
+                nameSet.add(name);
+              }
+            }
+
+            console.log(nameSet);
+            console.log(res);
+
+            return Array.from(nameSet);
           });
         }
       });
