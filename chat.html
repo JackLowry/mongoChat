@@ -241,15 +241,15 @@
                 socket.emit('create_server', {servername:newServerName});
                 socket.on('server_created', function(){
                   var serverDiv = document.createElement("button");
-                    serverDiv.setAttribute('id',newServerName);
-                    serverDiv.setAttribute('class','btn btn-outline-success');
-                    serverDiv.setAttribute('style','height:60px;width:126px');
+                  serverDiv.setAttribute('id',newServerName);
+                  serverDiv.setAttribute('class','btn btn-outline-success');
+                  serverDiv.setAttribute('style','height:60px;width:126px');
                 //    $('#modal').modal('hide');
                 //    serverDiv.setAttribute('');
                 //    serverDiv.setAttribute('');
                 //    serverDiv.setAttribute('');
 
-            //      onclick", "changeServer(" + newServerName + ")");
+            //     onclick", "changeServer(" + newServerName + ")");
                   serverDiv.textContent = newServerName;
                   document.getElementById("servers").appendChild(serverDiv);
                   changeServer(newServerName);
@@ -283,7 +283,9 @@
             socket.on('server_changed', function(data) {
               for(var i = 0; i < data.length; i++) {
                 var serverDiv = document.createElement("button");
-                serverDiv.setAttribute("id", data[i], "style", "height:60px;width:126px", "type", "button", "class","btn btn-outline-success", "onclick", "changeServer(" + data[i] + ")");
+                serverDiv.setAttribute('id',data[i]);
+                serverDiv.setAttribute('class','btn btn-outline-success');
+                serverDiv.setAttribute('style','height:60px;width:126px');
                 serverDiv.textContent = data[i];
                 document.getElementById("servers").appendChild(serverDiv);
               }
