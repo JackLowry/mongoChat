@@ -21,16 +21,17 @@ mongo.connect('mongodb://127.0.0.1/mongochat', function(err, db){
         // Get chats from mongo collection
         socket.on('change_server', function(data){
           currentServer = data.servername;
-
+          console.log(currentServer);
           db.collection(currentServer + "_chat*").find().limit(100).sort({_id:1}).toArray(function(err, res){
               if(err){
                   throw err;
               }
 
-                socket.emit('output', res);
+
+
+              socket.emit('output', res);
           });
 
-          socket.emit(getServerNames());
         });
 
         // Handle input events
@@ -148,9 +149,6 @@ mongo.connect('mongodb://127.0.0.1/mongochat', function(err, db){
                 nameSet.add(name);
               }
             }
-
-            console.log(nameSet);
-            console.log(res);
 
             return Array.from(nameSet);
           });

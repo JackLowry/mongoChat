@@ -31,7 +31,7 @@
 
 
 <!-- MODAL INBOUND-->
-                          <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal" style="height:60px;width:126px" >New<br> Server</button>
+                          <button id="new_server_modal_btn" type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal" style="height:60px;width:126px" >New<br> Server</button>
                           <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                           <div class="modal-dialog" role="document">
                             <div class="modal-content">
@@ -120,7 +120,37 @@
 
     <script>
   //  document.getElementById("popover").popover(); //popover() not recognized, hmmmmm  //TODO -reference popover.js thing in hmtl at top
-  $("[data-toggle=popover]").popover();
+    $("[data-toggle=popover]").popover();
+
+    function changeServer(serverName) {
+    // Connect to socket.io
+    var socket = io.connect('http://127.0.0.1:4000');
+
+    // Check for connection
+    if(socket !== undefined){
+      var messagesDiv = document.getElementById("messages");
+
+      while(messagesDiv.firstChild) {
+        messagesDiv.removeChild(messagesDiv.firstChild);
+      }
+
+      socket.emit('change_server', {servername:serverName});
+
+      document.cookie = "lastServer=" + serverName + "; path=/";
+
+      socket.on('server_changed', function(data) {
+        for(var i = 0; i < data.length; i++) {
+          var serverDiv = document.createElement("button");
+          serverDiv.setAttribute('id',data[i]);
+          serverDiv.setAttribute('class','btn btn-outline-success');
+          serverDiv.setAttribute('style','height:60px;width:126px');
+          serverDiv.setAttribute('onclick','changeServer(' + data[i] + ')');
+          serverDiv.textContent = data[i];
+          document.getElementById("servers").appendChild(serverDiv);
+        }
+      });
+    }
+  }
         (function(){
 
 
@@ -244,7 +274,7 @@
                     serverDiv.setAttribute('id',newServerName);
                     serverDiv.setAttribute('class','btn btn-outline-success');
                     serverDiv.setAttribute('style','height:60px;width:126px');
-                    serverDiv.setAttribute('onclick','changeServer(" + newServerName + ")');
+                    serverDiv.setAttribute('onclick','changeServer(' + newServerName + ')');
                 //    $('#modal').modal('hide');
                 //    serverDiv.setAttribute('');
                 //    serverDiv.setAttribute('');
@@ -272,9 +302,14 @@
 
           function changeServer(serverName) {
             var messagesDiv = document.getElementById("messages");
+            var serversDiv = document.getElementById("servers");
 
             while(messagesDiv.firstChild) {
               messagesDiv.removeChild(messagesDiv.firstChild);
+            }
+
+            while(serversDiv.lastChild.id !== "new_server_modal_btn") {
+              serversDiv.removeChild(serversDiv.lastChild);
             }
 
             socket.emit('change_server', {servername:serverName});
@@ -287,8 +322,9 @@
                 serverDiv.setAttribute('id',data[i]);
                 serverDiv.setAttribute('class','btn btn-outline-success');
                 serverDiv.setAttribute('style','height:60px;width:126px');
+                serverDiv.setAttribute('onclick','changeServer(' + data[i] + ')');
                 serverDiv.textContent = data[i];
-                document.getElementById("servers").appendChild(serverDiv);
+                serversDiv.appendChild(serverDiv);
               }
             });
           }
