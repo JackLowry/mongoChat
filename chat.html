@@ -302,7 +302,7 @@
 
           function changeServer(serverName) {
             var messagesDiv = document.getElementById("messages");
-            var serversDiv = document.getElementById("servers");
+            var serversDiv = document.getElementById("servers").firstChild;
 
             while(messagesDiv.firstChild) {
               messagesDiv.removeChild(messagesDiv.firstChild);
